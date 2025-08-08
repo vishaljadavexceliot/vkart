@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VK Art | Life in Lines, Stories in Strokes</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        @font-face {
+            font-family: 'Cormorant Garamond';
+            src: url('fonts/CormorantGaramond-Regular.woff2') format('woff2'),
+                url('fonts/CormorantGaramond-Regular.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Cormorant Garamond';
+            src: url('fonts/CormorantGaramond-Medium.woff2') format('woff2'),
+                url('fonts/CormorantGaramond-Medium.woff') format('woff');
+            font-weight: 500;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Cormorant Garamond';
+            src: url('fonts/CormorantGaramond-Bold.woff2') format('woff2'),
+                url('fonts/CormorantGaramond-Bold.woff') format('woff');
+            font-weight: 700;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Playfair Display';
+            src: url('fonts/PlayfairDisplay-Regular.woff2') format('woff2'),
+                url('fonts/PlayfairDisplay-Regular.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Playfair Display';
+            src: url('fonts/PlayfairDisplay-Bold.woff2') format('woff2'),
+                url('fonts/PlayfairDisplay-Bold.woff') format('woff');
+            font-weight: 700;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'La Belle Aurore';
+            src: url('fonts/La BelleAurore-Regular.woff2') format('woff2'),
+                url('fonts/La BelleAurore-Regular.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        :root {
+            --black: #1a1a1a;
+            --white: #f8f5f0;
+            --paper: #f0eae0;
+            --pencil: #3a3a3a;
+            --accent: #8b7d65;
+            --gold: #d4a373;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--black);
+            background-color: var(--white);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.7;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+
+        .handwriting {
+            font-family: 'La Belle Aurore', cursive;
+            font-size: 1.5rem;
+        }
+
+        /* Texture Overlay */
+        .texture-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M0 0 L100 0 L100 100 L0 100 Z" fill="none" stroke="rgba(0,0,0,0.02)" stroke-width="0.4" stroke-dasharray="2 2"/></svg>');
+            pointer-events: none;
+            z-index: 100;
+            mix-blend-mode: multiply;
+            opacity: 0.3;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            background-color: var(--paper);
+            overflow: hidden;
+            padding: 2rem;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600"><path d="M0 0 L600 0 L600 600 L0 600 Z" fill="none" stroke="rgba(58,58,58,0.06)" stroke-width="0.8" stroke-dasharray="4 4"/></svg>');
+            background-size: 600px 600px;
+            animation: grain 12s steps(12) infinite;
+        }
+
+        @keyframes grain {
+
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+
+            10% {
+                transform: translate(-2%, -2%);
+            }
+
+            20% {
+                transform: translate(-6%, 3%);
+            }
+
+            30% {
+                transform: translate(3%, -6%);
+            }
+
+            40% {
+                transform: translate(-3%, 10%);
+            }
+
+            50% {
+                transform: translate(-6%, 3%);
+            }
+
+            60% {
+                transform: translate(10%, 0);
+            }
+
+            70% {
+                transform: translate(0, 6%);
+            }
+
+            80% {
+                transform: translate(-10%, 0);
+            }
+
+            90% {
+                transform: translate(6%, 3%);
+            }
+        }
+
+        .logo {
+            width: 400px;
+            height: 400px;
+            margin-bottom: 3rem;
+            opacity: 0;
+            transform: scale(0.8);
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 10px 20px var(--shadow));
+        }
+
+        .tagline {
+            font-size: 2rem;
+            letter-spacing: 1px;
+            margin-top: 2rem;
+            opacity: 0;
+            font-weight: 500;
+            text-align: center;
+            max-width: 700px;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2.8s infinite;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateY(0) translateX(-50%);
+            }
+
+            40% {
+                transform: translateY(-30px) translateX(-50%);
+            }
+
+            60% {
+                transform: translateY(-15px) translateX(-50%);
+            }
+        }
+
+        /* About Section */
+        .about {
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            padding: 3rem 5%;
+            background-color: var(--white);
+            position: relative;
+        }
+
+        .about::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M0 0 L100 0 L100 100 L0 100 Z" fill="none" stroke="rgba(58,58,58,0.03)" stroke-width="0.4"/></svg>');
+            opacity: 0.2;
+        }
+
+        .about-content {
+            display: flex;
+            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto;
+            gap: 3rem;
+        }
+
+        .about-portrait {
+            flex: 1;
+            position: relative;
+            max-width: 600px;
+        }
+
+        .portrait-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 141.4%;
+            background-color: var(--paper);
+            box-shadow: 0 15px 30px var(--shadow);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            overflow: hidden;
+            border-radius: 10px;
+        }
+
+        .portrait {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: transform 0.6s ease, opacity 0.6s ease;
+            display: block;
+        }
+
+        .about-text {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .section-title {
+            font-size: 3.5rem;
+            margin-bottom: 3rem;
+            position: relative;
+            display: inline-block;
+            color: var(--black);
+        }
+
+        .section-title::after {
+            content: "";
+            position: absolute;
+            bottom: -15px;
+            left: 0;
+            width: 0;
+            height: 4px;
+            background-color: var(--gold);
+            transition: width 1.3s ease;
+        }
+
+        .about-text p {
+            font-size: 1.3rem;
+            line-height: 2;
+            margin-bottom: 2.5rem;
+            opacity: 0;
+            transform: translateY(40px);
+            max-width: 700px;
+        }
+
+        .quote {
+            font-style: italic;
+            margin-top: 3rem;
+            padding-left: 3rem;
+            border-left: 4px solid var(--gold);
+            opacity: 0;
+            transform: translateY(40px);
+            font-size: 1.4rem;
+        }
+
+        /* Gallery Section */
+        .gallery {
+            min-height: 100vh;
+            padding: 2rem 5%;
+            background-color: var(--paper);
+            position: relative;
+        }
+
+        .gallery-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .collections {
+            display: flex;
+            flex-direction: column;
+            gap: 5rem;
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+
+        .collection {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .collection-title {
+            font-size: 2.2rem;
+            margin-bottom: 3rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 3px solid var(--pencil);
+            color: var(--black);
+        }
+
+        .masonry-grid {
+            display: grid;
+            grid-gap: 3rem;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-auto-rows: auto;
+            width: 100%;
+        }
+
+        .grid-item {
+            position: relative;
+            overflow: hidden;
+            background-color: var(--white);
+            box-shadow: 0 15px 30px var(--shadow);
+            border-radius: 12px;
+            aspect-ratio: 1 / 1.414;
+        }
+
+        .grid-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transition: transform 0.7s ease;
+        }
+
+        .grid-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .item-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.5rem;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+            color: var(--white);
+            transform: translateY(100%);
+            transition: transform 0.5s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .grid-item:hover .item-overlay {
+            transform: translateY(0);
+        }
+
+        .item-price {
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        /* Contact Section */
+        .contact {
+            min-height: 30vh;
+            padding: 2rem 5%;
+            background-color: var(--paper);
+            position: relative;
+        }
+
+        .contact-container {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .contact-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .contact-info {
+            margin-bottom: 5rem;
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .contact-info p {
+            font-size: 1.4rem;
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .contact-info a {
+            color: var(--gold);
+            text-decoration: none;
+            transition: color 0.4s ease;
+        }
+
+        .contact-info a:hover {
+            color: var(--black);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .social-link {
+            font-size: 1.2rem;
+            color: var(--black);
+            text-decoration: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 20px;
+            background-color: var(--white);
+            box-shadow: 0 6px 15px var(--shadow);
+            transition: all 0.5s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .social-link i {
+            font-size: 1.4rem;
+        }
+
+        .social-link:hover {
+            background-color: var(--gold);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Footer */
+        .footer {
+            padding: 1rem 1rem;
+            text-align: center;
+            background-color: var(--black);
+            color: var(--white);
+            font-size: 1.2rem;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 1024px) {
+            .about-content {
+                flex-direction: column;
+                gap: 4rem;
+                align-items: center;
+            }
+
+            .about-portrait {
+                max-width: 500px;
+                width: 100%;
+            }
+
+            .portrait-container {
+                padding-bottom: 100%;
+            }
+
+            .about-text {
+                text-align: center;
+            }
+
+            .about-text p {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .quote {
+                padding-left: 0;
+                border-left: none;
+                border-top: 4px solid var(--gold);
+                padding-top: 2rem;
+            }
+
+            .masonry-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                grid-gap: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                padding: 2rem;
+            }
+
+            .logo {
+                width: 250px;
+                height: 250px;
+            }
+
+            .tagline {
+                font-size: 1.4rem;
+            }
+
+            .about,
+            .gallery,
+            .contact {
+                padding: 4rem 2rem;
+            }
+
+            .section-title {
+                font-size: 2.5rem;
+            }
+
+            .about-portrait {
+                max-width: 100%;
+            }
+
+            .portrait-container {
+                padding-bottom: 141.4%;
+            }
+
+            .portrait {
+                display: block;
+                opacity: 1;
+            }
+
+            .masonry-grid {
+                grid-template-columns: 1fr;
+                grid-gap: 1.5rem;
+            }
+
+            .grid-item {
+                aspect-ratio: 1 / 1.414;
+            }
+
+            .social-links {
+                gap: 1rem;
+                flex-wrap: wrap;
+            }
+
+            .social-link {
+                font-size: 1rem;
+                padding: 0.6rem 1.2rem;
+            }
+
+            .social-link i {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero {
+                height: 90vh;
+            }
+
+            .logo {
+                width: 300px;
+                height: 300px;
+            }
+
+            .tagline {
+                font-size: 1.2rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .about-text p {
+                font-size: 1.1rem;
+            }
+
+            .contact {
+                min-height: 30vh;
+                padding: 3rem 5%;
+            }
+
+            .contact-title {
+                margin-bottom: 2rem;
+            }
+
+            .quote {
+                font-size: 1.8rem;
+            }
+
+            .contact-info p {
+                font-size: 1.5rem;
+            }
+
+            .social-link {
+                font-size: 0.9rem;
+                padding: 0.5rem 1rem;
+            }
+
+            .social-link i {
+                font-size: 1.1rem;
+            }
+
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+</head>
+
+<body>
+    <!-- Texture Overlay -->
+    <div class="texture-overlay"></div>
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="logo">
+            <img src="logo1T.png" alt="VK Art Logo">
+        </div>
+        <h1 class="tagline">Life in Lines, Stories in Strokes</h1>
+        <div class="scroll-indicator">
+            <svg width="30" height="50" viewBox="0 0 30 50">
+                <path d="M15,0 L15,40 M0,25 L15,50 L30,25" stroke="var(--black)" stroke-width="2" fill="none" />
+            </svg>
+        </div>
+    </section>
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="about-content">
+            <div class="about-portrait">
+                <div class="portrait-container">
+                    <img class="portrait"
+                        src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80"
+                        alt="Artist Portrait">
+                </div>
+            </div>
+            <div class="about-text">
+                <h2 class="section-title">About the Artist</h2>
+                <p>With a pencil in hand since childhood, I've dedicated my life to capturing the essence of humanity
+                    through the simple yet profound medium of graphite and charcoal. Each stroke tells a story, each
+                    shadow reveals an emotion.</p>
+                <p>Graduating from the Academy of Fine Arts with honors, I've since exhibited in galleries across Europe
+                    and North America, with works held in private collections worldwide.</p>
+                <p class="quote handwriting">"A sketch is not just a drawing—it's a conversation between the artist and
+                    the world, whispered in pencil."</p>
+            </div>
+        </div>
+    </section>
+    <!-- Gallery Section -->
+    <section class="gallery" id="gallery">
+        <h2 class="gallery-title section-title">Collections</h2>
+        <div class="collections">
+            <div class="collection">
+                <h3 class="collection-title">Urban Sketches</h3>
+                <div class="masonry-grid">
+                    <div class="grid-item">
+                        <img src="https://images.unsplash.com/photo-1531214159280-079b95d26139?ixlib=rb-1.2.1&auto=format&fit=crop&w=595&h=842&q=80"
+                            alt="Urban Sketch 1" loading="lazy">
+                        <div class="item-overlay">
+                            <p class="item-price">$450 | A3</p>
+                        </div>
+                    </div>
+                    <div class="grid-item">
+                        <img src="https://images.unsplash.com/photo-1542131596-dea5384842c7?ixlib=rb-1.2.1&auto=format&fit=crop&w=421&h=595&q=80"
+                            alt="Urban Sketch 2" loading="lazy">
+                        <div class="item-overlay">
+                            <p class="item-price">$320 | A4</p>
+                        </div>
+                    </div>
+                    <div class="grid-item">
+                        <img src="https://images.unsplash.com/photo-1542887486-c0aeb6d2fc46?ixlib=rb-1.2.1&auto=format&fit=crop&w=595&h=842&q=80"
+                            alt="Urban Sketch 3" loading="lazy">
+                        <div class="item-overlay">
+                            <p class="item-price">$500 | A3</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="collection">
+                <h3 class="collection-title">Portrait Studies</h3>
+                <div class="masonry-grid">
+                    <div class="grid-item">
+                        <img src="https://images.unsplash.com/photo-1541961017774-22349e4a1262?ixlib=rb-1.2.1&auto=format&fit=crop&w=421&h=595&q=80"
+                            alt="Portrait 1" loading="lazy">
+                        <div class="item-overlay">
+                            <p class="item-price">$400 | A4</p>
+                        </div>
+                    </div>
+                    <div class="grid-item">
+                        <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?ixlib=rb-1.2.1&auto=format&fit=crop&w=421&h=595&q=80"
+                            alt="Portrait 2" loading="lazy">
+                        <div class="item-overlay">
+                            <p class="item-price">$280 | A4</p>
+                        </div>
+                    </div>
+                    <div class="grid-item">
+                        <img src="https://images.unsplash.com/photo-1517842645767-c639042777db?ixlib=rb-1.2.1&auto=format&fit=crop&w=595&h=842&q=80"
+                            alt="Portrait 3" loading="lazy">
+                        <div class="item-overlay">
+                            <p class="item-price">$550 | A3</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="collection">
+                <h3 class="collection-title">Nature Series</h3>
+                <div class="masonry-grid">
+                    <div class="grid-item">
+                        <img src="https://images.unsplash.com/photo-1542662565-7e4b66bae529?ixlib=rb-1.2.1&auto=format&fit=crop&w=595&h=842&q=80"
+                            alt="Nature 1" loading="lazy">
+                        <div class="item-overlay">
+                            <p class="item-price">$500 | A3</p>
+                        </div>
+                    </div>
+                    <div class="grid-item">
+                        <img src="https://images.unsplash.com/photo-1476231682828-37e571bc172f?ixlib=rb-1.2.1&auto=format&fit=crop&w=421&h=595&q=80"
+                            alt="Nature 2" loading="lazy">
+                        <div class="item-overlay">
+                            <p class="item-price">$350 | A4</p>
+                        </div>
+                    </div>
+                    <div class="grid-item">
+                        <img src="https://images.unsplash.com/photo-1470114716159-e389f8712fda?ixlib=rb-1.2.1&auto=format&fit=crop&w=595&h=842&q=80"
+                            alt="Nature 3" loading="lazy">
+                        <div class="item-overlay">
+                            <p class="item-price">$450 | A3</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="contact-container">
+            <h2 class="contact-title section-title">Contact</h2>
+            <div class="contact-info">
+                <p>Email: <a href="mailto:contact@vkart.com">contact@vkart.com</a></p>
+                <p>Studio: +1 (555) 123-4567</p>
+                <p style="font-style: italic;" class="handwriting">"Every blank page is an opportunity for a new story"
+                </p>
+            </div>
+            <div class="social-links">
+                <a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i> Instagram</a>
+                <a href="#" class="social-link" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+            </div>
+        </div>
+    </section>
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 VK Art. All rights reserved.</p>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Logo animation
+            const logo = document.querySelector('.logo');
+            const tagline = document.querySelector('.tagline');
+            gsap.to(logo, {
+                opacity: 1,
+                scale: 1,
+                duration: 2,
+                ease: "elastic.out(1, 0.3)"
+            });
+            gsap.to(tagline, {
+                opacity: 1,
+                y: 0,
+                delay: 0.5,
+                duration: 1.6,
+                ease: "power4.out"
+            });
+            // Section title underline animation
+            gsap.utils.toArray('.section-title').forEach(title => {
+                ScrollTrigger.create({
+                    trigger: title,
+                    start: "top 70%",
+                    onEnter: () => {
+                        gsap.to(title.querySelector('::after'), {
+                            width: "100%",
+                            duration: 1.3,
+                            ease: "power4.out"
+                        });
+                    }
+                });
+            });
+            // About section animations
+            gsap.utils.toArray('.portrait, .about-text p, .quote').forEach((el, i) => {
+                ScrollTrigger.create({
+                    trigger: el,
+                    start: "top 70%",
+                    onEnter: () => {
+                        gsap.to(el, {
+                            opacity: 1,
+                            y: 0,
+                            duration: 1.3,
+                            delay: i * 0.25,
+                            ease: "power4.out"
+                        });
+                    }
+                });
+            });
+            // Gallery animations
+            gsap.utils.toArray('.gallery-title, .collection').forEach((el, i) => {
+                ScrollTrigger.create({
+                    trigger: el,
+                    start: "top 70%",
+                    onEnter: () => {
+                        gsap.to(el, {
+                            opacity: 1,
+                            y: 0,
+                            duration: 1.2,
+                            delay: i * 0.35,
+                            ease: "power4.out"
+                        });
+                    }
+                });
+            });
+            // Contact section animations
+            gsap.utils.toArray('.contact-title, .contact-info, .social-links').forEach((el, i) => {
+                ScrollTrigger.create({
+                    trigger: el,
+                    start: "top 70%",
+                    onEnter: () => {
+                        gsap.to(el, {
+                            opacity: 1,
+                            y: 0,
+                            duration: 1.2,
+                            delay: i * 0.25,
+                            ease: "power4.out"
+                        });
+                    }
+                });
+            });
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        gsap.to(window, {
+                            duration: 1.3,
+                            scrollTo: target,
+                            ease: "power4.inOut"
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
